@@ -1,10 +1,11 @@
 package de.jbg.ui;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class Main {
+
     public static void main(String[] args) {
         UI.lossHihi();
+        memeClient client = new memeClient();
+        System.out.println(client.getAll());
     }
+
 }
