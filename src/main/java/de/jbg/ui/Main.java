@@ -1,12 +1,15 @@
 package de.jbg.ui;
 
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception, InterruptedException {
 
         Scanner scanner = new Scanner(System.in);
+        UI.lossHihi();
 
         memeClient client = new memeClient();
 
