@@ -20,15 +20,13 @@ public class memeClient {
 
     public String getAll() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(BASE_URL)).GET().build();
-
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
         return response.body();
     }
 
-    public String findById(int i) throws IOException, InterruptedException {
+    public String findById(int memeID) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + i))
+                .uri(URI.create(BASE_URL + "/" + memeID))
                 .GET()
                 .build();
 
@@ -36,7 +34,7 @@ public class memeClient {
 
         /*
         if(response.statusCode() == 404) {
-            throw new memeNotFoundException("todo.Todo not found");
+            throw new memeNotFoundException("memeID.Meme not found");
         }
          */
 
@@ -44,7 +42,8 @@ public class memeClient {
     }
 
 
-    /* further methods one could implement
+    /* further methods which could be implemented
+
     public HttpResponse<String> create(Todo todo) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
