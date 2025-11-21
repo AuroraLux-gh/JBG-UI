@@ -2,14 +2,22 @@
 
 package de.jbg.ui;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.*;
+import java.sql.Blob;
 //import de.jbg.ui.Execption;
 
 public class memeClient {
+
 
     private final static String BASE_URL = "http://localhost:8000/api/memes";
     private final HttpClient client;
@@ -24,21 +32,29 @@ public class memeClient {
         return response.body();
     }
 
-    public String findById(int memeID) throws IOException, InterruptedException {
+    Blob test;
+
+    public ImageIcon findById(int memeID) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/" + memeID))
                 .GET()
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
 
         /*
         if(response.statusCode() == 404) {
             throw new memeNotFoundException("memeID.Meme not found");
         }
          */
+        System.out.println("Content-Type: " + response.headers().firstValue("Content-Type").orElse("unknown"));
+        byte[] responseArray = response.body();
+        InputStream inputImage = new ByteArrayInputStream(responseArray);
+        BufferedImage buffImage = ImageIO.read(inputImage);
+        ImageIcon imgIcon = new ImageIcon(buffImage);
 
-        return response.body();
+
+        return imgIcon;
     }
 
 

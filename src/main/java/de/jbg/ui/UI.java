@@ -1,39 +1,63 @@
 package de.jbg.ui;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.*;
-import java.io.File;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class UI {
     public static void lossHihi() {
         JFrame frame = new JFrame("JBG 3.5");
-        JPanel panel = new JPanel();
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 500);
+        frame.setSize(1000, 700);
 
-        BorderLayout layout = new BorderLayout();
-        panel.setLayout(layout);
-        frame.add(panel, "Center");
+        JPanel panel = new JPanel(new GridBagLayout());
+        frame.add(panel);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JButton buttonLoad = new JButton("Eintrag laden");
-        panel.add(buttonLoad, "South");
         buttonLoad.setPreferredSize(new Dimension(150, 30));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.SOUTH;
+        panel.add(buttonLoad, gbc);
 
-        BufferedImage bImage = null;
-        try {
-            bImage = ImageIO.read(new File("testbild.jpg"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Image image1 = bImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-        ImageIcon image = new ImageIcon(image1);
-        panel.add(new JLabel(image));
+        memeClient client2 = new memeClient();
 
-        buttonLoad.setVisible(true);
+        JLabel imageLabel = new JLabel(); // Start leer
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(imageLabel, gbc);
+
+        JTextField text = new JTextField("", 20);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(text, gbc);
+
+        // ActionListener für Button
+        buttonLoad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int id = Integer.parseInt(text.getText().trim());
+                    // findById aufrufen
+                    Icon icon = client2.findById(id); // Angenommen, findById gibt ein Icon zurück
+                    imageLabel.setIcon(icon);
+                    frame.revalidate();
+                } catch (NumberFormatException | IOException | InterruptedException ex) {
+                    JOptionPane.showMessageDialog(frame, "Bitte eine gültige Zahl eingeben!");
+                }
+            }
+        });
+
         frame.setVisible(true);
     }
 }
