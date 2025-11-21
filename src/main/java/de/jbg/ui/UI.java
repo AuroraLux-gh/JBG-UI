@@ -27,6 +27,14 @@ public class UI {
         gbc.anchor = GridBagConstraints.SOUTH;
         panel.add(buttonLoad, gbc);
 
+        JButton buttonPost = new JButton("Bild senden");
+        buttonPost.setPreferredSize(new Dimension(150, 30));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.SOUTH;
+        panel.add(buttonPost, gbc);
+
         memeClient client2 = new memeClient();
 
         JLabel imageLabel = new JLabel(); // Start leer
@@ -54,6 +62,19 @@ public class UI {
                     frame.revalidate();
                 } catch (NumberFormatException | IOException | InterruptedException ex) {
                     JOptionPane.showMessageDialog(frame, "Bitte eine gültige Zahl eingeben!");
+                }
+            }
+        });
+
+        buttonPost.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    client2.postImage("testbild.jpg");
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         });
