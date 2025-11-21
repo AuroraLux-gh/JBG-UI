@@ -44,22 +44,18 @@ public class memeClient {
         BufferedImage buffImage = ImageIO.read(inputImage);
         ImageIcon imgIcon = new ImageIcon(buffImage);
 
-
         return imgIcon;
     }
-
 
 
     //POST-Methods
     public HttpResponse<String> postImage(String filePath) throws IOException, InterruptedException {   //can be exchanged to datatype Path instead of String
         byte[] testPicBytes;
-        {
             try {
                 testPicBytes = Files.readAllBytes(Path.of(filePath));
             } catch (IOException exception) {
                 throw new RuntimeException(exception);
             }
-        }
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
                 .POST(HttpRequest.BodyPublishers.ofByteArray(testPicBytes))
@@ -94,6 +90,5 @@ public class memeClient {
         return response.body();
     }
     */
-
 
 }
