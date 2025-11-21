@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class UI {
-    public static void lossHihi() {
+    public static void showUI() {
         JFrame frame = new JFrame("JBG 3.5");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
