@@ -13,6 +13,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Blob;
 //import de.jbg.ui.Execption;
 
@@ -26,22 +28,11 @@ public class memeClient {
         client = HttpClient.newHttpClient();
     }
 
-    public String getAll() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(BASE_URL)).GET().build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return response.body();
-    }
 
-    Blob test;
-
+    //GET-Methods
     public ImageIcon findById(int memeID) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/" + memeID))
-                .GET()
-                .build();
-
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(BASE_URL + "/" + memeID)).GET().build();
         HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
-
         /*
         if(response.statusCode() == 404) {
             throw new memeNotFoundException("memeID.Meme not found");
@@ -58,17 +49,26 @@ public class memeClient {
     }
 
 
-    /* further methods which could be implemented
 
-    public HttpResponse<String> create(Todo todo) throws IOException, InterruptedException {
+    //POST-Methods
+    public HttpResponse<String> postImage(String filePath) throws IOException, InterruptedException {   //can be exchanged to datatype Path instead of String
+        byte[] testPicBytes;
+        {
+            try {
+                testPicBytes = Files.readAllBytes(Path.of(filePath));
+            } catch (IOException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
-                .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(todo)))
+                .POST(HttpRequest.BodyPublishers.ofByteArray(testPicBytes))
                 .build();
 
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
+    /* further methods which could be implemented
     public HttpResponse<String> update(Todo todo) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/" + todo.id()))
@@ -87,6 +87,12 @@ public class memeClient {
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
+    //this works, but is not useful at the moment
+    public String getAll() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(BASE_URL)).GET().build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
     */
 
 
