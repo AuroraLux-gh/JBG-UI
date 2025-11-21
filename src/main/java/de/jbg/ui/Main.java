@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) throws Exception, InterruptedException {
 
 //        Scanner scanner = new Scanner(System.in);
-        UI.showUI();
+        UI.inputFile();
 
 //        memeClient client = new memeClient();
 
