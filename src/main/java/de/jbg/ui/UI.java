@@ -18,7 +18,6 @@ public class UI {
         memeClient client2 = new memeClient();
 
         JFrame frame = new JFrame("JBG 3.5");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
 
         JPanel panel = new JPanel(new GridBagLayout());
@@ -179,7 +178,6 @@ public class UI {
 
     public static void inputFile() {
         JFrame inputFrame = new JFrame("Add a File to the DB");
-        inputFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         inputFrame.setSize(1000, 700);
 
         JPanel inputPanel = new JPanel(new GridBagLayout());
