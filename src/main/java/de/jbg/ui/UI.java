@@ -8,15 +8,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.*;
+import java.sql.SQLOutput;
 
 public class UI {
 
     private static int id=0;    //hier da sonst Probleme mit ActionListener - https://www.java-forum.org/thema/variablen-aus-action-listener-lesen-und-weiterverarbeiten.136661/
+    static memeClient client2 = new memeClient();
+    static File selectedFile = null;
 
     public static void showUI() {
-
-        memeClient client2 = new memeClient();
-
         JFrame frame = new JFrame("JBG 3.5");
         frame.setSize(1000, 700);
 
@@ -51,13 +51,13 @@ public class UI {
         gbc.anchor = GridBagConstraints.SOUTHWEST;
         panel.add(buttonPrev, gbc);
 
-        JButton buttonPost = new JButton("Bild senden");
-        buttonPost.setPreferredSize(new Dimension(150, 30));
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.SOUTH;
-        panel.add(buttonPost, gbc);
+//        JButton buttonPost = new JButton("Bild senden");
+//        buttonPost.setPreferredSize(new Dimension(150, 30));
+//        gbc.gridx = 0;
+//        gbc.gridy = 6;
+//        gbc.gridwidth = 2;
+//        gbc.anchor = GridBagConstraints.SOUTH;
+//        panel.add(buttonPost, gbc);
 
         JButton buttonUpdate = new JButton("Datum auf heute updaten");
         buttonUpdate.setPreferredSize(new Dimension(150, 30));
@@ -154,29 +154,17 @@ public class UI {
             }
         });
 
-        buttonPost.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    client2.postImage("testbild.jpg");
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-
         frame.setVisible(true);
     }
 
-    static String vHeight;
-    static String vLength;
-    static String vSize;
-    static String vCategory;
-    static String vTag;
+    static int vHeight;
+    static int vLength;
+    static int vSize;
+    static int vCategory;
+    static int vTag;
 
     public static void inputFile() {
+
         JFrame inputFrame = new JFrame("Add a File to the DB");
         inputFrame.setSize(1000, 700);
 
@@ -218,6 +206,21 @@ public class UI {
 
         inputFrame.add(inputPanel);
 
+        JButton buttonPost = new JButton("Bild senden");
+        inputPanel.add(buttonPost);
+        buttonPost.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    client2.postImage(String.valueOf(selectedFile), vHeight, vLength, vSize, vCategory, vTag);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
         JButton buttonAdd = new JButton("Add new Image");
         inputPanel.add(buttonAdd);
         buttonAdd.addActionListener(new ActionListener() {
@@ -227,24 +230,24 @@ public class UI {
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("Image files","jpg", "png", "jpeg");
                 chooser.setFileFilter(filter);
                 int returnVal = chooser.showOpenDialog(inputPanel);
-                File selectedFile = null;
+
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                     System.out.println("You chose to open this file: " +
                             chooser.getSelectedFile().getName());
                     selectedFile = chooser.getSelectedFile();
+                    System.out.println(selectedFile);
                 }
 //                try {
 //                    InputStream imageInput = new FileInputStream(selectedFile.getPath());
 //                } catch (FileNotFoundException ex) {
 //                    throw new RuntimeException(ex);
 //                }
-                vHeight = height.getText().trim();
-                vLength = length.getText().trim();
-                vSize = size.getText().trim();
-                vCategory = category.getText().trim();
-                vTag = tag.getText().trim();
+                vHeight = Integer.parseInt(height.getText().trim());
+                vLength = Integer.parseInt(length.getText().trim());
+                vSize = Integer.parseInt(size.getText().trim());
+                vCategory = Integer.parseInt(category.getText().trim());
+                vTag = Integer.parseInt(tag.getText().trim());
             }
-
         });
         inputFrame.setVisible(true);
         buttonAdd.setVisible(true);
