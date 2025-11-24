@@ -18,14 +18,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Blob;
 
+
 import static de.jbg.ui.UI.vHeight;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+//import de.jbg.ui.Execption;
+
 
 public class memeClient {
 
 
     private final static String BASE_URL = "http://localhost:8000/api/memes";
     private final HttpClient client;
-
     public memeClient() {
         client = HttpClient.newHttpClient();
     }
@@ -70,25 +77,27 @@ public class memeClient {
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
-    /* further methods which could be implemented
-    public HttpResponse<String> update(Todo todo) throws IOException, InterruptedException {
+
+    public HttpResponse<String> updateDateToToday(String memeID) throws IOException, InterruptedException {
+        String currentDay = String.valueOf(Date.valueOf(LocalDate.now()));
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/" + todo.id()))
-                .PUT(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(todo)))
+                .uri(URI.create(BASE_URL + "/" + memeID))
+                .PUT(HttpRequest.BodyPublishers.ofString(currentDay))
                 .build();
 
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
-    public HttpResponse<String> delete(Todo todo) throws IOException, InterruptedException {
+    public HttpResponse<String> deleteMeme(Integer memeID) throws IOException, InterruptedException {
         var request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/" + todo.id()))
+                .uri(URI.create(BASE_URL + "/" + memeID))
                 .DELETE()
                 .build();
 
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
+    /*
     //this works, but is not useful at the moment
     public String getAll() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(BASE_URL)).GET().build();

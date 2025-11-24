@@ -14,6 +14,9 @@ public class UI {
     private static int id=0;    //hier da sonst Probleme mit ActionListener - https://www.java-forum.org/thema/variablen-aus-action-listener-lesen-und-weiterverarbeiten.136661/
 
     public static void showUI() {
+
+        memeClient client2 = new memeClient();
+
         JFrame frame = new JFrame("JBG 3.5");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
@@ -57,7 +60,21 @@ public class UI {
         gbc.anchor = GridBagConstraints.SOUTH;
         panel.add(buttonPost, gbc);
 
-        memeClient client2 = new memeClient();
+        JButton buttonUpdate = new JButton("Datum auf heute updaten");
+        buttonUpdate.setPreferredSize(new Dimension(150, 30));
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.SOUTH;
+        panel.add(buttonUpdate, gbc);
+
+        JButton buttonDelete = new JButton("Bild/Eintrag löschen");
+        buttonDelete.setPreferredSize(new Dimension(150, 30));
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.SOUTH;
+        panel.add(buttonDelete, gbc);
 
         JLabel imageLabel = new JLabel();
         gbc.gridx = 0;
@@ -96,6 +113,30 @@ public class UI {
                     frame.revalidate();
                 } catch (NumberFormatException | IOException | InterruptedException ex) {
                     JOptionPane.showMessageDialog(frame, "Bitte gib eine gültige Zahl ein.");
+                }
+            }
+        });
+
+        buttonUpdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String id = String.valueOf(String.valueOf(Integer.parseInt(text.getText().trim())));
+                    client2.updateDateToToday(id);
+                } catch (NumberFormatException | IOException | InterruptedException ex) {
+                    JOptionPane.showMessageDialog(frame, "Bitte eine gültige Zahl eingeben!");
+                }
+            }
+        });
+
+        buttonDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Integer id = Integer.parseInt(text.getText().trim());
+                    client2.deleteMeme(id);
+                } catch (NumberFormatException | IOException | InterruptedException ex) {
+                    JOptionPane.showMessageDialog(frame, "Bitte eine gültige Zahl eingeben!");
                 }
             }
         });
