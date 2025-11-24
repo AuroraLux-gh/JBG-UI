@@ -14,9 +14,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Blob;
+import java.util.Base64;
 
 
 import static de.jbg.ui.UI.vHeight;
@@ -57,21 +59,50 @@ public class memeClient {
 
 
     //POST-Methods
-    public HttpResponse<String> postImage(String filePath) throws IOException, InterruptedException {   //can be exchanged to datatype Path instead of String
-        byte[] testPicBytes;
-            try {
-                testPicBytes = Files.readAllBytes(Path.of(filePath));
-            } catch (IOException exception) {
-                throw new RuntimeException(exception);
-            }
+//    public HttpResponse<String> postImage(String filePath) throws IOException, InterruptedException {   //can be exchanged to datatype Path instead of String
+//        byte[] testPicBytes;
+//            try {
+//                testPicBytes = Files.readAllBytes(Path.of(filePath));
+//            } catch (IOException exception) {
+//                throw new RuntimeException(exception);
+//            }
+//            String deineMudda = new String(testPicBytes, StandardCharsets.UTF_8);
+////        HttpRequest request = HttpRequest.newBuilder()
+////                .uri(URI.create(BASE_URL))
+////                .POST(HttpRequest.BodyPublishers.ofByteArray(testPicBytes))
+////                .build();
+//        String requestBody = "param1=" + URLEncoder.encode(UI.vHeight) + "&param2=" + URLEncoder.encode(UI.vLength) + "&param3=" + URLEncoder.encode(UI.vSize) + "&param4=" + URLEncoder.encode(UI.vCategory) + "&param5=" + URLEncoder.encode(UI.vTag) + "&param6=" + URLEncoder.encode(deineMudda);
 //        HttpRequest request = HttpRequest.newBuilder()
 //                .uri(URI.create(BASE_URL))
-//                .POST(HttpRequest.BodyPublishers.ofByteArray(testPicBytes))
+//                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
 //                .build();
-        String requestBody = "param1=" + URLEncoder.encode(UI.vHeight) + "&param2=" + URLEncoder.encode(UI.vLength) + "&param3=" + URLEncoder.encode(UI.vSize) + "&param4=" + URLEncoder.encode(UI.vCategory) + "&param5=" + URLEncoder.encode(UI.vTag);
+//        System.out.println(requestBody);
+//        return client.send(request, HttpResponse.BodyHandlers.ofString());
+//    }
+
+    public HttpResponse<String> postImage(String filePath,
+                                          int vHeight,
+                                          int vLength,
+                                          int vSize,
+                                          int vCategory,
+                                          int vTag) throws IOException, InterruptedException {
+
+        byte[] imageBytes = Files.readAllBytes(Path.of(filePath));
+        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+        String json = "{"
+                + "\"height\":" + vHeight + ","
+                + "\"length\":" + vLength + ","
+                + "\"size\":" + vSize + ","
+                + "\"category\":" + vCategory + ","
+                + "\"tag\":" + vTag + ","
+                + "\"image\":\"" + base64Image + "\""
+                + "}";
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
         return client.send(request, HttpResponse.BodyHandlers.ofString());
