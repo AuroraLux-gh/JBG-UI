@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -16,7 +17,8 @@ import java.net.http.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Blob;
-//import de.jbg.ui.Execption;
+
+import static de.jbg.ui.UI.vHeight;
 
 public class memeClient {
 
@@ -27,7 +29,6 @@ public class memeClient {
     public memeClient() {
         client = HttpClient.newHttpClient();
     }
-
 
     //GET-Methods
     public ImageIcon findById(int memeID) throws IOException, InterruptedException {
@@ -56,9 +57,14 @@ public class memeClient {
             } catch (IOException exception) {
                 throw new RuntimeException(exception);
             }
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .uri(URI.create(BASE_URL))
+//                .POST(HttpRequest.BodyPublishers.ofByteArray(testPicBytes))
+//                .build();
+        String requestBody = "param1=" + URLEncoder.encode(UI.vHeight) + "&param2=" + URLEncoder.encode(UI.vLength) + "&param3=" + URLEncoder.encode(UI.vSize) + "&param4=" + URLEncoder.encode(UI.vCategory) + "&param5=" + URLEncoder.encode(UI.vTag);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
-                .POST(HttpRequest.BodyPublishers.ofByteArray(testPicBytes))
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
 
         return client.send(request, HttpResponse.BodyHandlers.ofString());

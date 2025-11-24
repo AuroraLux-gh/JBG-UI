@@ -77,12 +77,11 @@ public class UI {
             public void actionPerformed(ActionEvent e) {
                 try {
                     int id = Integer.parseInt(text.getText().trim());
-
-                    Icon icon = client2.findById(id); // Angenommen, findById gibt ein Icon zurück
+                    Icon icon = client2.findById(id);
                     imageLabel.setIcon(icon);
                     frame.revalidate();
                 } catch (NumberFormatException | IOException | InterruptedException ex) {
-                    JOptionPane.showMessageDialog(frame, "Bitte eine gültige Zahl eingeben!");
+                    JOptionPane.showMessageDialog(frame, "Bitte gib eine gültige Zahl ein.");
                 }
             }
         });
@@ -92,12 +91,11 @@ public class UI {
             public void actionPerformed(ActionEvent e) {
                 try {
                     id += 1;
-                    // findById aufrufen
-                    Icon icon = client2.findById(id); // Angenommen, findById gibt ein Icon zurück
+                    Icon icon = client2.findById(id);
                     imageLabel.setIcon(icon);
                     frame.revalidate();
                 } catch (NumberFormatException | IOException | InterruptedException ex) {
-                    JOptionPane.showMessageDialog(frame, "Bitte eine gültige Zahl eingeben!");
+                    JOptionPane.showMessageDialog(frame, "Bitte gib eine gültige Zahl ein.");
                 }
             }
         });
@@ -107,12 +105,11 @@ public class UI {
             public void actionPerformed(ActionEvent e) {
                 try {
                     id -= 1;
-                    // findById aufrufen
-                    Icon icon = client2.findById(id); // Angenommen, findById gibt ein Icon zurück
+                    Icon icon = client2.findById(id);
                     imageLabel.setIcon(icon);
                     frame.revalidate();
                 } catch (NumberFormatException | IOException | InterruptedException ex) {
-                    JOptionPane.showMessageDialog(frame, "Bitte eine gültige Zahl eingeben!");
+                    JOptionPane.showMessageDialog(frame, "Bitte gib eine gültige Zahl ein.");
                 }
             }
         });
@@ -133,13 +130,18 @@ public class UI {
         frame.setVisible(true);
     }
 
+    static String vHeight;
+    static String vLength;
+    static String vSize;
+    static String vCategory;
+    static String vTag;
+
     public static void inputFile() {
         JFrame inputFrame = new JFrame("Add a File to the DB");
         inputFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         inputFrame.setSize(1000, 700);
 
         JPanel inputPanel = new JPanel(new GridBagLayout());
-
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -151,14 +153,11 @@ public class UI {
         TextFieldBackground.addBackground(height, "height");
         inputPanel.add(height);
 
-
-
         JTextField length = new JTextField();
         TextFieldBackground.addBackground(length, "length");
         gbc.gridx = 0;
         gbc.gridy = 2;
         inputPanel.add(length);
-
 
         JTextField size = new JTextField();
         TextFieldBackground.addBackground(size, "size");
@@ -166,13 +165,11 @@ public class UI {
         gbc.gridy = 3;
         inputPanel.add(size);
 
-
         JTextField category = new JTextField();
         TextFieldBackground.addBackground(category, "category");
         gbc.gridx = 0;
         gbc.gridy = 4;
         inputPanel.add(category);
-
 
         JTextField tag = new JTextField();
         TextFieldBackground.addBackground(tag, "tag");
@@ -181,7 +178,6 @@ public class UI {
         inputPanel.add(tag);
 
         inputFrame.add(inputPanel);
-
 
         JButton buttonAdd = new JButton("Add new Image");
         inputPanel.add(buttonAdd);
@@ -198,12 +194,16 @@ public class UI {
                             chooser.getSelectedFile().getName());
                     selectedFile = chooser.getSelectedFile();
                 }
-                try {
-                    InputStream imageInput = new FileInputStream(selectedFile.getPath());
-                } catch (FileNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                }
-
+//                try {
+//                    InputStream imageInput = new FileInputStream(selectedFile.getPath());
+//                } catch (FileNotFoundException ex) {
+//                    throw new RuntimeException(ex);
+//                }
+                vHeight = height.getText().trim();
+                vLength = length.getText().trim();
+                vSize = size.getText().trim();
+                vCategory = category.getText().trim();
+                vTag = tag.getText().trim();
             }
 
         });
